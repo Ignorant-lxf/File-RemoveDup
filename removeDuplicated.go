@@ -23,7 +23,7 @@ func RemoveDup() {
 func RemoveFileContent(dir, name string) {
 	record := make(map[string]int)
 
-	// 读取旧文件
+	// 获取旧文件
 	filepath := fmt.Sprintf("%s%s%s", dir, "\\", name)
 	file, err := os.OpenFile(filepath, os.O_RDWR|os.O_CREATE, 0766)
 	if err != nil {
@@ -32,7 +32,7 @@ func RemoveFileContent(dir, name string) {
 	defer file.Close()
 	reader := bufio.NewReader(file)
 
-	// 写入新文件
+	// 获取新文件
 	newFilepath := fmt.Sprintf("%s%s%s", dir, "\\new_", name)
 	newFile, err := os.OpenFile(newFilepath, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0766)
 	if err != nil {
@@ -48,12 +48,11 @@ func RemoveFileContent(dir, name string) {
 		}
 
 		if _, ok := record[string(line)]; !ok {
-			record[string(line)] = 1
-			//写入到新文件
 			_, _ = writer.Write(line)
 			_, _ = writer.WriteString("\n")
 			_ = writer.Flush()
+
+			record[string(line)] = 1
 		}
 	}
-
 }
